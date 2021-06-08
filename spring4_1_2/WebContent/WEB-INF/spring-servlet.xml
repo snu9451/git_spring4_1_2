@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="default-handler-mapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	<bean id="board-controller" class="web.mvc.Board41Controller">
+		<property name="methodNameResolver" ref="board-resolver"/>
+		<property name="boardLogic" ref="board-logic"/>
+	</bean>
+	<bean id="url-mapping"
+	class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<!-- 약속된 setter이므로 이름 변경하면 안 됨 -->
+		<property name="mappings">
+			<props>
+				<prop key="/board/getBoardList.sp4">board-controller</prop>
+				<prop key="/board/jsonGetBoardList.sp4">board-controller</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="board-resolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">  
+		<!-- 의존성 객체 주입 -->
+		<property name="mappings">
+			<props>
+				<prop key="/board/getBoardList.sp4">getBoardList</prop>
+				<prop key="/board/jsonGetBoardList.sp4">jsonGetBoardList</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>

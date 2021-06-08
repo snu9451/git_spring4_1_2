@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.BoardMapper">
+<!-- 	<resultMap type="com.vo.BoardMVO" id="bmVO"> -->
+<!-- 		<result column="bm.bm_no" property="bm_no"/> -->
+<!-- 		<result column="bm.bm_title" property="bm_title"/> -->
+<!-- 		<result column="bm.bm_date" property="bm_date"/> -->
+<!-- 		<result column="bm.bm_hit" property="bm_hit"/> -->
+<!-- 		<collection property="bs_VO" resultMap="bsVO"/> -->
+<!-- 	</resultMap> -->
+<!-- 	<resultMap type="com.vo.BoardSVO" id="bsVO"> -->
+<!-- 		<result column="bs.bs_file" property="bs_file"/> -->
+<!-- 	</resultMap> -->
+	<select id="time" parameterType="java.lang.String" resultType="java.lang.String">
+		Select sysdate from dual
+	</select>
+	<select id="getBoardList" parameterType="bmVO" resultType="map">
+		SELECT bm.bm_no, bm.bm_title, bm.bm_date, bs.bs_file, bm.bm_hit
+  		  FROM board_master2019 bm
+      	      ,board_sub2019 bs
+ 		 WHERE bm.bm_no = bs.bm_no(+)
+	</select>
+</mapper>
