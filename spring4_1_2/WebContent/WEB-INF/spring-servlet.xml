@@ -3,6 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<bean id="default-handler-mapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	<bean name="/di/hello.sp4" class="kosmo80.mvc.sp4.HelloController"/>
+	<bean id="emp-controller" class="kosmo80.mvc.sp4.EmpController">
+		<property name="methodNameResolver" ref="emp-resolver"/>
+		<property name="empLogic" ref="emp-logic"/>
+	</bean>
 	<bean id="board-controller" class="web.mvc.Board41Controller">
 		<property name="methodNameResolver" ref="board-resolver"/>
 		<property name="boardLogic" ref="board-logic"/>
@@ -12,8 +17,25 @@
 		<!-- 약속된 setter이므로 이름 변경하면 안 됨 -->
 		<property name="mappings">
 			<props>
+				<prop key="/board/boardInsert.sp4">board-controller</prop>
 				<prop key="/board/getBoardList.sp4">board-controller</prop>
 				<prop key="/board/jsonGetBoardList.sp4">board-controller</prop>
+				<prop key="/di/getEmpList.sp4">emp-controller</prop>
+				<prop key="/di/empInsert.sp4">emp-controller</prop>
+				<prop key="/di/empUpdate.sp4">emp-controller</prop>
+				<prop key="/di/empDelete.sp4">emp-controller</prop> 
+			</props>
+		</property>
+	</bean>
+	<bean id="emp-resolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">  
+		<!-- 의존성 객체 주입 -->
+		<property name="mappings">
+			<props>
+				<prop key="/di/getEmpList.sp4">getEmpList</prop>
+				<prop key="/di/empInsert.sp4">empInsert</prop>
+				<prop key="/di/empUpdate.sp4">empUpdate</prop>
+				<prop key="/di/empDelete.sp4">empDelete</prop> 
+				
 			</props>
 		</property>
 	</bean>
@@ -21,6 +43,7 @@
 		<!-- 의존성 객체 주입 -->
 		<property name="mappings">
 			<props>
+				<prop key="/board/boardInsert.sp4">boardInsert</prop>
 				<prop key="/board/getBoardList.sp4">getBoardList</prop>
 				<prop key="/board/jsonGetBoardList.sp4">jsonGetBoardList</prop>
 			</props>

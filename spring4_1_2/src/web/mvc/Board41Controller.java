@@ -18,56 +18,126 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import com.google.gson.Gson;
 import com.util.HashMapBinder;
 
+// deprecated: 향후에 지원하지 않겠다.
 public class Board41Controller extends MultiActionController {
-	Logger logger = Logger.getLogger(Board41Controller.class);
-	private Board41Logic boardLogic = null;
-	//setter메소드를 통하여 게으른 객체 주입
+//	<bean id="board-controller">
+//		<property name="setter의 이름인 boardLogic">
+	// 직접 인스턴스화 하지 않고 Spring의 지원을 받을 것이므로 null로 둔다.
+	// setter 객체 주입법으로 주입받을 수 있다. (게으른 객체주입)
+	private Board41Logic	boardLogic	= null;
+	Logger					logger		= Logger.getLogger(Board41Controller.class);
+
 	public void setBoardLogic(Board41Logic boardLogic) {
 		this.boardLogic = boardLogic;
 	}
-	//request로 유지
-	//메소드를 정의하는 것은 가능하다.
-	//파라미터가 없이도 괜찮은건가?
-	//파라미터에 req나 res가 없으면 아무리 xml문서에 url매핑을 해두었다 하더라도 찾지를 못합니다.\
-	//이 사실 하나만 보더라도 이것은 의존적이다 라고 이야기 할 수 있지 않을까요? - 여러분의 생각은 무엇입니까?
-	//최초 나는 ModelAndView를 사용하였습니다. 이것은 MultiActionController를 상속 받았을 때 
-	//우리가 doGet에서는 누릴 수 없었던 반환 타입을 바꾸어 쓸 수 있는 혜택을 누릴 수 있게 된 것이죠
-	//여기에 동의 하시나요? 동의 하신다면 ModelAndView의 scope를 request로 한 이유도 생각해 
-	//보세요. 이 생각의 끝에 forward로 페이지를 부른 다는 사실을 인지하게 될 것입니다.
-	//ModelAndView 가 있는데 굳이 파라미터에 req,res가 있어야만 한다 그렇지 않으면 매핑을 해주지 않을  것이라고 
-	//말하는 것은 앞뒤가 맞지 않는 것입니다. 이상한 태도를 보이는 것이죠
-	//굳이 없어도 되는 것을 형식적으로 가지고 있어야 한다. doGet안에 있는 것이니까 너도 있어야 해줄거야? 라고 말하는 것이죠
-	
-	public ModelAndView getBoardList(HttpServletRequest req, HttpServletResponse res) 
-	throws Exception
-	{
+
+	// request로 유지
+	// 파라미터에 req, res가 없어도 괜찮은가? -- 메소드를 찾지 못하는듯?
+	public ModelAndView getBoardList(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		logger.info("getBoardList 호출 성공");
-		HashMapBinder hmb = new HashMapBinder(req);
-		Map<String,Object> target = new HashMap<>();
+		HashMapBinder		hmb		= new HashMapBinder(req);
+		Map<String, Object>	target	= new HashMap<>();
 		hmb.bind(target);
-		List<Map<String,Object>> boardList = null;
-		boardList=boardLogic.getBoardList(target);//where bm_no=? and bm_title LIKE '%'||?||'%'
-		logger.info("boardList:"+boardList);//
-		ModelAndView mav = new ModelAndView();
+		List<Map<String, Object>> boardList = null;
+		boardList = boardLogic.getBoardList(target);
+		logger.info("boardList:"+boardList);
+//		boardList = new ArrayList<>();
+//		Map<String, Object> rmap = new HashMap<>();
+//		rmap.put("mem_id", "tomato");
+//		rmap.put("mem_pw", "123");
+//		rmap.put("mem_name", "이순신");
+//		boardList.add(rmap);
+//		rmap = new HashMap<>();
+//		rmap.put("mem_id", "apple");
+//		rmap.put("mem_pw", "124");
+//		rmap.put("mem_name", "강감찬");
+//		boardList.add(rmap);
+//		rmap = new HashMap<>();
+//		rmap.put("mem_id", "orange");
+//		rmap.put("mem_pw", "125");
+//		rmap.put("mem_name", "김유신");
+//		boardList.add(rmap);
+//		Gson	g		= new Gson();
+//		String	imsi	= g.toJson(boardList);
+		// 예를 들어 회원의 이름과 전화번호로 검색을 할 수 있음
+//		boardLogic.getBoardList(target); // WHERE bm_no=? AND bm_title LIKE '%'||?||'%'
+		ModelAndView	mav		= new ModelAndView();
+//		String			name	= "이순신";
 		mav.setViewName("board/getBoardList");
-		mav.addObject("boardList", boardList);
-		//RequestDispatcher view = req.getRequestDispatcher("getBoardList.jsp");
-		//view.forward(req, res);
+//		mav.addObject("name", name);
+		mav.addObject("list", boardList);		
+//		HttpSession session = req.getSession();
+//		session.setAttribute("name", name);
+//		RequestDispatcher view = req.getRequestDispatcher("getBoardList.jsp");
+//		view.forward(req, res);
 		return mav;
 	}
-	//json으로 내보내준다. - @RestController:String, @Controller:void, ModelAndView, String
-	//@RestController
-	public void jsonGetBoardList(HttpServletRequest req, HttpServletResponse res)
+
+	public void boardInsert(HttpServletRequest req, HttpServletResponse res)
 	throws Exception
 	{
+		logger.info("boardInsert 호출 성공");
+		HashMapBinder hmb = new HashMapBinder(req);
+		logger.info("============================> "+req);
+		Map<String, Object> pmap = new HashMap<>();
+		// 사용자가 입력한 값 또는 서버에서 클라이언트에게 요청한 값을 넘김
+		hmb.bind(pmap);
+		logger.info("============================> "+pmap);
+		// MN: 단위테스트 - 사용자로부터 받은 값이라 치자.
+//		pmap.put("bm_no",48);
+//      pmap.put("bm_title","제목");
+//      pmap.put("bm_writer","나다");
+//	    pmap.put("bm_email","safs@nanaa.com");
+//	    pmap.put("bm_content","야야아앙이ㅓ리ㅏ너");
+//	    pmap.put("bm_hit",777);
+//	    pmap.put("bm_group",5);
+//	    pmap.put("bm_pos",4);
+//	    pmap.put("bm_step",3);
+//	    pmap.put("bm_pw","asdff");
+		// ▲ MN: request 객체에 담겨 있는 값을 (그릇 역할을 해줄) pmap에 옮겨 담는다.
+		int result = 0;
+		result = boardLogic.boardInsert(pmap);
+		if(result == 1){
+			// MN: 입력(insert) 결과가 성공인 경우, 곧바로 sp4로 서블릿을 타서 전체 조회를 실행해준다.
+			res.sendRedirect("./getBoardList.sp4");
+		}
+		else {
+			res.sendRedirect("./boardInsertFail.jsp");
+		}
+	}
+	
+	// json으로 내보내준다. - @RestController: (only) String, @Controller: void,
+	// Return Type: ModelAndView, String...
+//	public void jsonGetBoardList() {
+	// SPRING을 사용하지 않는다면 요청객체와 응답객체를 파라미터로 받아와야 함.
+//	public String jsonGetBoardList(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public void jsonGetBoardList(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		logger.info("jsonGetBoardList 호출 성공");
-		List<Map<String,Object>> boardList = null;
+		List<Map<String, Object>> boardList = null;
+//		rmap.put("mem_id", "tomato");
+//		rmap.put("mem_pw", "123");
+//		rmap.put("mem_name", "이순신");
+//		boardList.add(rmap);
+//		rmap = new HashMap<>();
+//		rmap.put("mem_id", "apple");
+//		rmap.put("mem_pw", "124");
+//		rmap.put("mem_name", "강감찬");
+//		boardList.add(rmap);
+//		rmap = new HashMap<>();
+//		rmap.put("mem_id", "orange");
+//		rmap.put("mem_pw", "125"); 
+//		rmap.put("mem_name", "김유신");
+//		boardList.add(rmap);
+		Gson	g		= new Gson(); 
 		boardList = boardLogic.getBoardList(null);
-		Gson g = new Gson();
-		String imsi = g.toJson(boardList);
+		String	imsi	= g.toJson(boardList);  
+//		return imsi;
+		// 마임타입과 인코딩(캐릭터셋)을 지정
+		res.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = res.getWriter();
-		res.setContentType("application/json;charset=utf-8");
+		// 특별히 페이지를 설정하지 않았음..
 		out.print(imsi);
+//		req.setAttribute("imsi", imsi);
 	}
 
 }

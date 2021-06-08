@@ -1,26 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.util.*" %>    
-<%
-	//ì„œë¸”ë¦¿ì—ì„œ EmpLogic.java-> EmpDao.java -> List<Map>
-	//mav.addObject("empList",empList);
-	//request.setAttribute("empList",empList);
-	//forwardë°©ì‹ì´ë‹¤.
-	List<Map<String,Object>> empList = (List<Map<String,Object>>)request.getAttribute("empList");
-	out.print(empList);//êµ¬ì¡°ì²´ í˜•ì‹ì˜ ì¶œë ¥ì„ ë³¼ ìˆ˜ ìˆë‹¤.
-	int size = 0;
-	if(empList!=null){
-		size = empList.size();
-	}
-	out.print("size : "+size);
-%>    
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>ì‚¬ì› ëª©ë¡ í˜ì´ì§€</title>
+<meta charset="EUC-KR">
+<title>»ç¿ø ¸ñ·Ï ÆäÀÌÁö</title>
 </head>
 <body>
-ì‚¬ì› ëª©ë¡ í˜ì´ì§€ ì…ë‹ˆë‹¤.
+	empList Ãâ·Â<br>
+	»ç¿ø ¸ñ·Ï ÆäÀÌÁöÀÔ´Ï´Ù.<br>
+<%
+	// SSR°ú CSRÀÌ °øÁ¸
+	// ¼­ºí¸´¿¡¼­ EmpLogic.java -> EmpDao.java -> List<Map>
+	// mav.addObject("empList", empList);
+	// request.setAttribute("empList", empList);
+	// ÀÌ·¯ÇÑ ¹æ½ÄÀÌ [forward]¹æ½ÄÀÌ´Ù.
+	List<Map<String, Object>> empList = (List<Map<String, Object>>)request.getAttribute("empList");
+	out.println(empList);
+	int size=0;
+	if(empList!=null){
+		size = empList.size();
+	}
+	/* or(Map<String, Object> map : empList){
+		
+		out.println()
+	} */
+%>
+	${empList.toString()}
 </body>
 </html>

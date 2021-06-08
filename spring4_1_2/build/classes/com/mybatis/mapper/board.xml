@@ -16,10 +16,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="time" parameterType="java.lang.String" resultType="java.lang.String">
 		Select sysdate from dual
 	</select>
-	<select id="getBoardList" parameterType="bmVO" resultType="map">
-		SELECT bm.bm_no, bm.bm_title, bm.bm_date, bs.bs_file, bm.bm_hit
-  		  FROM board_master2019 bm
-      	      ,board_sub2019 bs
- 		 WHERE bm.bm_no = bs.bm_no(+)
+	<select id="getBoardList" parameterType="map" resultType="map">
+		SELECT bm_no, bm_title, bm_date, bm_writer, bm_hit
+  		  FROM board_master2019
+<!-- 		SELECT bm.bm_no, bm.bm_title, bm.bm_date, bs.bs_file, bm.bm_hit -->
+<!--   		  FROM board_master2019 bm -->
+<!--       	      ,board_sub2019 bs -->
+<!--  		 WHERE bm.bm_no = bs.bm_no(+) -->
 	</select>
+	<insert id="boardInsert" parameterType="map">
+		INSERT INTO BOARD_MASTER2019(bm_no, bm_title, bm_writer, bm_email, bm_content, bm_date)
+<!--     		 VALUES (MY_CLASS_SEQ.NEXTVAL,#{bm_title},#{bm_writer},#{bm_email},#{bm_content},#{bm_hit},TO_CHAR(SYSDATE, 'YYYY-MM-DD'),#{bm_group},#{bm_pos},#{bm_step},#{bm_pw}) -->
+    		 VALUES (MY_CLASS_SEQ.NEXTVAL,#{bm_title},#{bm_writer},#{bm_email},#{bm_content},TO_CHAR(SYSDATE, 'YYYY-MM-DD HH:MI'))
+<!--     		 VALUES (MY_CLASS_SEQ.NEXTVAL,'ddd','ddd','ddd','sfd',6,TO_CHAR(SYSDATE, 'YYYY-MM-DD'),1,1,1,'adfs') -->
+	</insert>
 </mapper>
