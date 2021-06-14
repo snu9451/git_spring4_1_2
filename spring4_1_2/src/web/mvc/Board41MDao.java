@@ -23,7 +23,7 @@ public class Board41MDao {
 		
 		logger.info("getBoardList 호출 성공");
 		logger.info("sqlSessionTemplate ===> "+sqlSessionTemplate);
-		logger.info(sqlSessionTemplate.selectOne("time"));
+		logger.info(sqlSessionTemplate.selectOne("time", null));
 		
 		List<Map<String, Object>> boardList = null;
 		boardList = sqlSessionTemplate.selectList("getBoardList", pmap);
@@ -36,7 +36,21 @@ public class Board41MDao {
 		int result = 0;
 		// MN: insert 후 곧바로 (정수 타입의) 결과를 반환받음
 		logger.info("#########################"+pmap);
-		result = sqlSessionTemplate.insert("boardInsert", pmap);
+		result = sqlSessionTemplate.insert("boardMInsert", pmap);
+		return result;
+	}
+	public void bmStepUpdate(Map<String, Object> pmap) {
+		logger.info("bmStepUpadate 호출 성공");
+		sqlSessionTemplate.update("bmStepUpdate", pmap);
+	}
+	public void hitCount(Map<String, Object> pmap) {
+		logger.info("hitCount 호출 성공");
+		sqlSessionTemplate.update("hitCount", pmap);
+	}
+	public int getBmGroup() {
+		logger.info("getBmGroup 호출 성공");
+		int result = 0;
+		result = sqlSessionTemplate.selectOne("getBmGroup");
 		return result;
 	}
 }

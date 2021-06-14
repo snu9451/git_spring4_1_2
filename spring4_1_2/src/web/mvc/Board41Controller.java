@@ -65,14 +65,38 @@ public class Board41Controller extends MultiActionController {
 //		String			name	= "이순신";
 		mav.setViewName("board/getBoardList");
 //		mav.addObject("name", name);
-		mav.addObject("list", boardList);		
+		mav.addObject("boardList", boardList);		
 //		HttpSession session = req.getSession();
 //		session.setAttribute("name", name);
 //		RequestDispatcher view = req.getRequestDispatcher("getBoardList.jsp");
 //		view.forward(req, res);
 		return mav;
+	/*************************************************************************
+	 * 게시글 상세보기 구현
+	 * @param req
+	 * @param res
+	 * @return ModelAndView
+	 * @throws Exception
+	 * 주의사항: 전체조회와 하나로 합쳐지므로, target에 구분값을 추가할 것.
+	 */
+	public ModelAndView getBoardDetail(HttpServletRequest req, HttpServletResponse res)
+	throws Exception
+	{
+		logger.info("getBoardDetail 호출 성공");
+		HashMapBinder		hmb		= new HashMapBinder(req);
+		Map<String, Object>	target	= new HashMap<>();
+		hmb.bind(target);
+		target.put("gubun", "detail");
+		// 테스트
+//		target.put("bm_no", 100); // 테스트 성공! => 이렇게 하지 않고 GET 방식으로 테스트 해도 좋음
+		List<Map<String, Object>> boardDetail = null;
+		boardDetail = boardLogic.getBoardList(target);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("board/read");
+		logger.info("boardDetail:"+boardDetail);
+		mav.addObject("boardDetail",boardDetail);
+		return mav;
 	}
-
 	public void boardInsert(HttpServletRequest req, HttpServletResponse res)
 	throws Exception
 	{

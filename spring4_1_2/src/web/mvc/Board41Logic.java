@@ -14,6 +14,10 @@ public class Board41Logic {
 	public List<Map<String, Object>> getBoardList(Map<String, Object> pmap) {
 		logger.info("getBoardList 호출 성공");
 		List<Map<String, Object>> boardList = null;
+		String gubun = pmap.get("gubun").toString();
+		if(gubun!=null && "detail".equals(gubun)) {
+			
+		}
 		boardList = bmDao.getBoardList(pmap);
 		return boardList;
 	}

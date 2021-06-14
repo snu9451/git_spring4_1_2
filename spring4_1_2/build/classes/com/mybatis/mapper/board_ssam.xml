@@ -38,7 +38,7 @@
 	<insert id="boardMInsert" parameterType="map">
 		INSERT INTO board_master2019(bm_no, bm_title, bm_writer, bm_email
 		                           , bm_content, bm_date, bm_group, bm_pos, bm_step, bm_pw) 
-		                      values(MY_CLASS_SEQ.NEXTVAL,'테스트-제목 board.xml',#{bm_writer},#{bm_email}
+		                      values(#{bm_no},#{bm_title},#{bm_writer},#{bm_email}
 		                           , #{bm_content}, to_char(sysdate, 'YYYY-MM-DD'), 0,0,0,#{bm_pw}
 		                            )
 	</insert>
@@ -57,25 +57,22 @@
 		 <![CDATA[ and bm_step > #{bm_step} ]]>
 	</update>
 	<select id="getBoardList" parameterType="map" resultType="map">
-		 SELECT bm.bm_no, bm.bm_email, bm.bm_writer, bm.bm_content, bm.bm_pw, bm.bm_title, bm.bm_date, bs.bs_file, bm.bm_hit
+		 SELECT bm.bm_no, bm.bm_title, bm.bm_date, bs.bs_file, bm.bm_hit
 		  FROM board_master2019 bm
 		      ,board_sub2019 bs
 		 WHERE bm.bm_no = bs.bm_no(+)	
 		<if test='cb_search!=null and cb_search.equals("bm_title")'>
 	  	   AND bm.bm_title LIKE '%'||#{tb_search}||'%'
 		</if>	 
-		<if test='bm_no > 0'>
-	  	   AND bm.bm_no = #{bm_no}
-		</if>	 
 		ORDER BY bm_group  desc, bm_step asc
 	</select>
-<!-- 	<select id="getBoardMap" parameterType="map" resultMap="boardMMap"> -->
+<!-- 	<select id="getBoardMap" parameterType="map" resultMap="map"> -->
 <!-- 		 SELECT bm.bm_no, bm.bm_title, bm.bm_date, bs.bs_file, bm.bm_hit -->
 <!-- 		  FROM board_master2019 bm -->
 <!-- 		      ,board_sub2019 bs -->
 <!-- 		 WHERE bm.bm_no = bs.bm_no(+)	 -->
 <!-- 	</select> -->
-	<select id="time" parameterType="map" resultType="string"> 
+	<select id="test" parameterType="map" resultType="string"> 
 		select TO_CHAR(sysdate, 'YYYY-MM-DD') from dual
 	</select> 
 </mapper>
